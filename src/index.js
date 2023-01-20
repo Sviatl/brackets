@@ -2,8 +2,9 @@ module.exports = function check(str, bracketsConfig) {
   return checkB(str, bracketsConfig);
 }
 
-const checkB = (str, bracketsConfig) => {
+const checkM = (str, bracketsConfig) => {
   let v = 1;
+  let vv = 999;
   let nn = 0;
   let i = 0;
   for (mm in bracketsConfig) {
@@ -23,12 +24,13 @@ const checkB = (str, bracketsConfig) => {
         }
       }
       if (nn != 0) return false;
-      str = str.split(bracketsConfig[mm][0]).join(0 + '$');
+      str = str.split(bracketsConfig[mm][0]).join(vv + '$');
       continue;
     }
     str = str.split(bracketsConfig[mm][0]).join(-1 * v + '$');
     str = str.split(bracketsConfig[mm][1]).join(1 * v + '$');
     v = v * 10;
+    vv = 999 *10;
   }
   let arr = str.split('$');
   let sum = 0;
@@ -53,7 +55,7 @@ const checkB = (str, bracketsConfig) => {
       was = true;
       for (j in arr2) {
         ii = arr2.length - 1 - j;
-        if (arr2[ii] != -1*arr[i] || arr2[ii]>0) return false;
+        // if (arr2[ii] != -1*arr[i] || arr2[ii]>0) return false;
         i = i + 1; 
         arr3.push(arr2[ii]);
         sum = sum + 1 * arr[i];
@@ -78,6 +80,64 @@ const checkB = (str, bracketsConfig) => {
   else return false;
 
 }
+
+
+const checkB = (str, bracketsConfig) => {
+  let v = 1;
+  let vv = 'k';
+  let nn = 0;
+  let i = 0;
+  for (mm in bracketsConfig) {
+    if (bracketsConfig[mm][0] == bracketsConfig[mm][1]) {
+      nn == 0;
+      even = false;
+      for (i in str) {
+        if (str[i] == bracketsConfig[mm][0]) {
+          if (even) {
+            even = false;
+            nn = nn + 1;
+          }
+          else {
+            even = true;
+            nn = nn - 1;
+          }
+        }
+      }
+      if (nn != 0) return false;
+      str = str.split(bracketsConfig[mm][0]).join(vv + '$');
+      vv = ("" + vv + 'k');
+      continue;
+    }
+    str = str.split(bracketsConfig[mm][0]).join(-1 * v + '$');
+    str = str.split(bracketsConfig[mm][1]).join(1 * v + '$');
+    v = v * 10;
+  }
+  let arr = str.split('$');
+  
+  arr.splice(arr.length-1, 1);
+
+  end = false;
+  ll = 0;
+  while (end == false) {
+    for (i = 1; i < arr.length; i ++){
+      if ((arr[i] == -1*arr[i-1] && arr[i-1] < arr[i])||(arr[i] == arr[i-1] && arr[i][0]=='k')){
+        arr.splice(i-1, 2);
+        ll = 0;
+        break;
+      }  
+    }  
+    ll = ll + 1;
+    if (ll > 500 || arr.length < 2)  {
+      end = true;
+    }
+  }
+
+  if (arr.length > 0) return false;
+  else return true;
+
+
+}
+
 const config1 = [['(', ')']];
 const config2 = [['(', ')'], ['[', ']']];
 const config3 = [['(', ')'], ['[', ']'], ['{', '}']];
@@ -88,7 +148,9 @@ const config4 = [['|', '|']];
 // console.log(checkB('([{}])', config3));
 //console.log(checkB('|()|(||)||', config5));//11
 //console.log(checkB('((()))()', config1));//2
-//console.log(checkB('())(', config1));//3
+// console.log(checkB('())(', config1));//3
  //console.log(checkB('[(])', config2));//5
  //console.log(checkB('||', config4));//8
- console.log(checkB('111115611111111222288888822225577877778775555666677777777776622222', config6)); //12
+ //console.log(checkB('111115611111111222288888822225577877778775555666677777777776622222', config6)); //12
+
+ console.log(checkB('8888877878887777777888888887777777887887788788887887777777788888888887788888', config6));//14 false
